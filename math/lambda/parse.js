@@ -15,7 +15,7 @@ const openParenthesis = err('Non-closed parenthesis');
 
 const parseLambda = toParse => {
   [...toParse].forEach((c,i) => {
-    if (!c.match(/[a-zA-Z().λ]/)) invalid(c,i+1);})
+    if (!c.match(/[a-zA-Zα-ωΑ-Ω().]/)) invalid(c,i+1);})
   s = toParse;
   idx = 0;
   nest = 0;
@@ -55,7 +55,7 @@ const _getLambda = (partial) => {
   if (char == 'λ') return _absFromVars(_getVars(),_getLambda());
   let term;
   if (char == '(') {nest++; term = _getLambda();}
-  else if (['I','M','K'].includes(char)) term = Lambda[char];
+  else if ('IMKSΩY'.split('').includes(char)) term = Lambda[char];
   else {
     if (!char.match(/[a-z]/i)) unexpected(char,idx);
     term = vbl(char);

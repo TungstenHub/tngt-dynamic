@@ -49,12 +49,25 @@ const vbl = name         => new Var(name);
 const abs = (name, term) => new Abs(name,term);
 const app = (fun, body)  => new App(fun,body);
 
-Lambda.I = abs('x',vbl('x'));
-Lambda.M = abs('x',app(vbl('x'),vbl('x')));
-Lambda.K = abs('x',abs('y',vbl('x')));
+const apps = (...args) => args.reduce(app);
+
+const x = 'x';
+const y = 'y';
+const z = 'z';
+const f = 'f';
+const _x = vbl(x);
+const _y = vbl(y);
+const _z = vbl(z);
+const _f = vbl(f);
+Lambda.I = abs(x,_x);
+Lambda.M = abs(x,app(_x,_x));
+Lambda.K = abs(x,abs(y,_x));
+Lambda.S = abs(x,abs(y,abs(z,app(app(_x,_z),app(_y,_z)))));
+Lambda.Ω = app(Lambda.M,Lambda.M);
+Lambda.Y = abs(f,app(abs(x,app(_f,app(_x,_x))),abs(x,app(_f,app(_x,_x)))));
 
 export {
   Lambda, Var, Abs, App,
-  vbl, abs, app,
+  vbl, abs, app, apps,
   LambdaVisitor,
 }

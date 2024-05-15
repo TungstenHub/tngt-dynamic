@@ -26,7 +26,9 @@ class Subs extends LambdaVisitor {
 const THE = new Subs();
 
 const subs = (v,b) => l => l.accept(THE,v,b);
+const rename = (v,w) => subs(v,vbl(w));
 
 export {
   subs,
+  rename,
 }

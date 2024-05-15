@@ -13,7 +13,9 @@ class FreeVars extends LambdaVisitor {
 const THE = new FreeVars();
 
 const freeVars = l => l.accept(THE);
+const isCombinator = l => freeVars(l).size == 0;
 
 export {
   freeVars,
+  isCombinator,
 }
