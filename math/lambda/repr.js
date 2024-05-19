@@ -30,6 +30,12 @@ class RichRepr extends Repr {
     for (const c of 'IMKSΩY'.split(''))
       if (alphaEq(x,Lambda[c])) return c;
   }
+
+  _collectAbs(x) {
+    const r = this._rich(x.term);
+    if (r) return x.var + '.' + r;
+    return super._collectAbs(x);
+  }
 }
 
 const SIMPLE_THE = new SimpleRepr();
