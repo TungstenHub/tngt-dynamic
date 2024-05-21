@@ -1,28 +1,28 @@
-import { False, True, add, exp, fst, ifthenelse, mul, num, pair, snd, succ }
+import { False, True, add, exp, fst, ifthenelse, mul, num, pair, snd, suc }
   from "../math/lambda/arith.js";
 import { leftmost_seq, infinite_seq, normal } from "../math/lambda/beta.js";
 import { alphaEq, literalEq } from "../math/lambda/eq.js";
 import { freeVars, isCombinator } from "../math/lambda/freeVars.js";
 import { app, apps, vbl } from "../math/lambda/lambda.js";
 import { parseLambda } from "../math/lambda/parse.js";
-import { repr, richRepr, simpleRepr } from "../math/lambda/repr.js";
+import { richRepr, simpleRepr, stdRepr } from "../math/lambda/repr.js";
 import { subs } from "../math/lambda/subs.js";
 import { check, checkTrans, sect, test } from "./util.js";
 
 const checkParseSimpleRepr = checkTrans(x => simpleRepr(parseLambda(x)));
-const checkParseRepr       = checkTrans(x => repr(parseLambda(x)));
+const checkParseRepr       = checkTrans(x => stdRepr(parseLambda(x)));
 const checkParseRichRepr   = checkTrans(x => richRepr(parseLambda(x)));
 const checkRichRepr        = checkTrans(richRepr);
 
 const checkParseInvalid = checkTrans(x => {
-  try { return repr(parseLambda(x)); }
+  try { return stdRepr(parseLambda(x)); }
   catch (e) { return e.message; }
 });
 
 const checkFV   = checkTrans(x => [...freeVars(parseLambda(x))].join(''));
 const checkComb = checkTrans(x => isCombinator(parseLambda(x)));
 
-const checkSubs = (v,b) => checkTrans(x => repr(subs(v,b)(parseLambda(x))));
+const checkSubs = (v,b) => checkTrans(x => stdRepr(subs(v,b)(parseLambda(x))));
 
 const checkLiteral = (x,y,b) => check(literalEq(parseLambda(x),parseLambda(y)),b);
 const checkAlpha   = (x,y,b) => check(alphaEq(parseLambda(x),parseLambda(y)),b);
@@ -229,9 +229,9 @@ test('arithmetic', () => {
     apps(ifthenelse,False,x,y), y,
     app(fst,apps(pair,x,y)),    x,
     app(snd,apps(pair,x,y)),    y,
-    app(succ,_0),               _1,
-    app(succ,_1),               _2,
-    app(succ,_2),               _3,
+    app(suc,_0),                _1,
+    app(suc,_1),                _2,
+    app(suc,_2),                _3,
     apps(add,_0,_0),            _0,
     apps(add,_1,_2),            _3,
     apps(add,_4,_5),            _9,

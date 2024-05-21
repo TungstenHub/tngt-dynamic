@@ -3,4 +3,6 @@ const label = reg => id => {
   return reg[lang][id];
 };
 
-export default label;
+export {
+  label
+};

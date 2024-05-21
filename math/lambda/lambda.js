@@ -5,6 +5,19 @@ class Lambda {
   isVar() { return false; }
   isAbs() { return false; }
   isApp() { return false; }
+
+  static get I() { return _name(I(), 'I'); }
+  static get M() { return _name(M(), 'M'); }
+  static get K() { return _name(K(), 'K'); }
+  static get S() { return _name(S(), 'S'); }
+  static get Ω() { return _name(Ω(), 'Ω'); }
+  static get Y() { return _name(Y(), 'Y'); }
+
+  static num(n)  { return _name(num(n), n); }
+  static get suc() { return _name(suc(), '#'); }
+  static get add() { return _name(add(), '+'); }
+  static get mul() { return _name(mul(), '*'); }
+  static get exp() { return _name(exp(), '^'); }
 }
 
 class Var extends Lambda {
@@ -55,16 +68,34 @@ const x = 'x';
 const y = 'y';
 const z = 'z';
 const f = 'f';
+const m = 'm';
+const n = 'n';
 const _x = vbl(x);
 const _y = vbl(y);
 const _z = vbl(z);
 const _f = vbl(f);
-Lambda.I = abs(x,_x);
-Lambda.M = abs(x,app(_x,_x));
-Lambda.K = abs(x,abs(y,_x));
-Lambda.S = abs(x,abs(y,abs(z,app(app(_x,_z),app(_y,_z)))));
-Lambda.Ω = app(Lambda.M,Lambda.M);
-Lambda.Y = abs(f,app(abs(x,app(_f,app(_x,_x))),abs(x,app(_f,app(_x,_x)))));
+const _m = vbl(m);
+const _n = vbl(n);
+
+const I = () => abs(x,_x);
+const M = () => abs(x,app(_x,_x));
+const K = () => abs(x,abs(y,_x));
+const S = () => abs(x,abs(y,abs(z,app(app(_x,_z),app(_y,_z)))));
+const Ω = () => app(Lambda.M,Lambda.M);
+const Y = () => abs(f,app(abs(x,app(_f,app(_x,_x))),abs(x,app(_f,app(_x,_x)))));
+
+const num = k => {
+  let curr = _x;
+  for (let i = 0; i < k; i++) curr = app(_f,curr);
+  return abs(f,abs(x,curr));
+}
+
+const suc = () => abs(n,abs(f,abs(x,app(_f,app(app(_n,_f),_x)))));
+const add = () => abs(m,abs(n,abs(f,abs(x,app(app(_m,_f),app(app(_n,_f),_x))))));
+const mul = () => abs(m,abs(n,abs(f,abs(x,app(app(_m,app(_n,_f)),_x)))));
+const exp = () => abs(m,abs(n,abs(f,abs(x,app(app(app(_n,_m),_f),_x)))));
+
+const _name = (x,n) => {x.name = n; return x;};
 
 export {
   Lambda, Var, Abs, App,

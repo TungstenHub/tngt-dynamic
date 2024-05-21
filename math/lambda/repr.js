@@ -1,5 +1,4 @@
 import { Lambda, LambdaVisitor } from "./lambda.js";
-import { tex as baseTex } from "../../utils/log.js";
 import { alphaEq } from "./eq.js";
 
 class SimpleRepr extends LambdaVisitor {
@@ -38,23 +37,58 @@ class RichRepr extends Repr {
   }
 }
 
+class NamedRepr extends RichRepr {
+  _rich(x) {
+    return x.name;
+  }
+}
+
+class NumRepr extends RichRepr {
+  _rich(x) {
+    for (const n of [0,1,2,3,4,5,6,7,8,9])
+      if (alphaEq(x,Lambda.num(n))) return n+'';
+    if (alphaEq(x,Lambda.suc)) return '\\#';
+    if (alphaEq(x,Lambda.add)) return '+';
+    if (alphaEq(x,Lambda.mul)) return '*';
+    if (alphaEq(x,Lambda.exp)) return '\\,\\hat{}\\,';
+    return super._rich(x);
+  }
+}
+
 const SIMPLE_THE = new SimpleRepr();
 const THE = new Repr();
 const RICH_THE = new RichRepr();
+const NAMED_THE = new NamedRepr();
+const NUM_THE = new NumRepr();
 
 const simpleRepr = l => l.accept(SIMPLE_THE);
-const simpleTex  = l => baseTex(simpleRepr(l).replaceAll('λ','\\lambda '));
-const repr       = l => l.accept(THE);
-const tex        = l => baseTex(repr(l).replaceAll('λ','\\lambda '));
+const simpleTex  = l => simpleRepr(l).replaceAll('λ','\\lambda ');
+const stdRepr    = l => l.accept(THE);
+const stdTex     = l => stdRepr(l).replaceAll('λ','\\lambda ');
 const richRepr   = l => l.accept(RICH_THE);
-const richTex    = l => baseTex(richRepr(l).replaceAll('λ','\\lambda ')
-                        .replace(/([IMKSΩY])/g, "\\mathsf{$1}"));
+const richTex    = l => richRepr(l).replaceAll('λ','\\lambda ')
+                        .replace(/([IMKSΩY0123456789+])/g, "\\mathsf{$1}");
+const namedRepr  = l => l.accept(NAMED_THE);
+const namedTex   = l => namedRepr(l).replaceAll('λ','\\lambda ')
+                        .replace(/([IMKSΩY0123456789+])/g, "\\mathsf{$1}");
+const numRepr  = l => l.accept(NUM_THE);
+const numTex   = l => numRepr(l).replaceAll('λ','\\lambda ')
+                        .replace(/([IMKSΩY0123456789])/g, "\\mathsf{$1}");
 
 export {
-  repr,
-  tex,
+  SimpleRepr,
   simpleRepr,
   simpleTex,
+  Repr,
+  stdRepr,
+  stdTex,
+  RichRepr,
   richRepr,
   richTex,
+  NamedRepr,
+  namedRepr,
+  namedTex,
+  NumRepr,
+  numRepr,
+  numTex,
 }
