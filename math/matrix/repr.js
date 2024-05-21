@@ -1,4 +1,4 @@
-import label from "../../utils/lang.js";
+import { label } from "../../utils/lang.js";
 import { tex } from "../../utils/log.js";
 import Frac from "../number/frac.js";
 
