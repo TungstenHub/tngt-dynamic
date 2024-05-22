@@ -10,7 +10,7 @@ const lb = label({
     reductions: 'Let\'s perform some $\\beta$-reductions in the first'
       + ' $\\beta$-redex we find',
     normal: w => `and ${w} is in $\\beta$-normal form`,
-    forever: 'and we have yet not encountered a $\\beta$-normal form',
+    forever: 'and we have not yet encountered a $\\beta$-normal form',
     term: 'term',
   },
   es : {
