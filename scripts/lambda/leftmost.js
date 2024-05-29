@@ -70,7 +70,7 @@ const script = {
   ],
   logic: ([l]) => {
     const t = parseLambda(l);
-    const tt = Array.from(leftmost_seq(t,10));
+    const tt = Array.from(leftmost_seq(t,100));
     if (tt.length == 1) return [tex(richTex(t)), lb('already')];
     const bnf = isBNF(tt[tt.length-1]);
     return [
